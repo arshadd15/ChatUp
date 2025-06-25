@@ -1,4 +1,3 @@
-const express = require("express");
 const ratelimiter = require("express-rate-limit");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
