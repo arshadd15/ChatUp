@@ -1,0 +1,12 @@
+@import "tailwindcss";
+@plugin "daisyui";
+@plugin "daisyui" {
+  themes: "light", "dark", "cupcake", "bumblebee", "emerald", "corporate",
+    "synthwave", "retro", "cyberpunk", "valentine", "halloween", "garden",
+    "forest", "aqua", "lofi", "pastel", "fantasy", "silk", "black", "luxury",
+    "dracula", "cmyk", "autumn", "business", "lemonade", "night", "winter",
+    "dim", "nord", "sunset";
+}
+@theme {
+  --animate-bounce-3: bounce 1s ease-in-out 3;
+}
