@@ -1,3 +1,4 @@
+const express = require("express");
 const ratelimiter = require("express-rate-limit");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
@@ -6,7 +7,7 @@ const authRoutes = require("./routes/auth.routes");
 const messageRoutes = require("./routes/message.routes");
 const cors = require("cors");
 const { app, server } = require("./lib/socket");
-const psth = require("path");
+const path = require("path");
 
 dotenv.config();
 
