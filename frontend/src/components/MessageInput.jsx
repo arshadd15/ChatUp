@@ -92,8 +92,18 @@ const MessageInput = () => {
 
           <button
             type="button"
+<<<<<<< HEAD
             className={`hidden sm:flex btn btn-circle
                      ${imagePreview ? "text-emerald-500" : "text-zinc-400"}`}
+=======
+            className={`flex btn btn-circle transition-opacity ${
+              isSendingMessage
+                ? "opacity-50 cursor-not-allowed"
+                : imagePreview
+                ? "text-emerald-500"
+                : "text-primary-500"
+            }`}
+>>>>>>> f5ba03c (UI changes)
             onClick={() => fileInputRef.current?.click()}
           >
             <Image size={20} />
