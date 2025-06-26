@@ -58,7 +58,7 @@ const ChatContainer = () => {
       ) : (
         <ChatHeader />
       )}
-      <div className="flex-1 overflow-y-auto mt-6 lg:mt-0 p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto mt-8 lg:mt-0 p-4 space-y-4">
         {messages.map((message) => (
 >>>>>>> bd5f59e (Final responsive changes)
           <div
