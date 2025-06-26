@@ -9,6 +9,7 @@ export const useChatStore = create((set, get) => ({
   selectedUser: null,
   isUsersLoading: false,
   isMessagesLoading: false,
+  isSendingMessage: false,
 
   getUsers: async () => {
     set({ isUsersLoading: true });
@@ -16,7 +17,11 @@ export const useChatStore = create((set, get) => ({
       const res = await axiosInstance.get("/messages/users");
       set({ users: res.data });
     } catch (error) {
-      toast.error(error.response?.data?.message || "Something went wrong");
+      toast.error(
+        error.response?.data?.message ||
+          error.response?.data ||
+          "Something went wrong"
+      );
     } finally {
       set({ isUsersLoading: false });
     }
@@ -28,7 +33,11 @@ export const useChatStore = create((set, get) => ({
       const res = await axiosInstance.get(`/messages/${userId}`);
       set({ messages: res.data });
     } catch (error) {
-      toast.error(error.response?.data?.message || "Something went wrong");
+      toast.error(
+        error.response?.data?.message ||
+          error.response?.data ||
+          "Something went wrong"
+      );
     } finally {
       set({ isMessagesLoading: false });
     }
@@ -36,6 +45,7 @@ export const useChatStore = create((set, get) => ({
 
   sendMessage: async (messageData) => {
     const { selectedUser, messages } = get();
+    set({ isSendingMessage: true });
     try {
       const res = await axiosInstance.post(
         `/messages/send/${selectedUser._id}`,
@@ -43,7 +53,13 @@ export const useChatStore = create((set, get) => ({
       );
       set({ messages: [...messages, res.data] });
     } catch (error) {
-      toast.error(error.response?.data?.message || "Something went wrong");
+      toast.error(
+        error.response?.data?.message ||
+          error.response?.data ||
+          "Something went wrong"
+      );
+    } finally {
+      set({ isSendingMessage: false });
     }
   },
 
@@ -52,6 +68,8 @@ export const useChatStore = create((set, get) => ({
     if (!selectedUser) return;
 
     const socket = useAuthStore.getState().socket;
+
+    socket.off("newMessage");
 
     socket.on("newMessage", (newMessage) => {
       if (newMessage.senderId !== selectedUser._id) return;

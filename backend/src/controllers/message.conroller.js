@@ -30,7 +30,7 @@ const getMessages = async (req, res) => {
     });
     return res.status(200).json(messages);
   } catch (error) {
-    console.log("Error in getMessages conroller:", error.Message);
+    console.log("Error in getMessages conroller:", error.message);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
@@ -65,7 +65,7 @@ const sendMessage = async (req, res) => {
 
     return res.status(201).json(newMessage);
   } catch (error) {
-    console.log("Error in sendMessage controller:", error.Message);
+    console.log("Error in sendMessage controller:", error.message);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };

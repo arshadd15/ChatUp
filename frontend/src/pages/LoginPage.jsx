@@ -97,11 +97,7 @@ const LoginPage = () => {
               {isLoggingIn ? (
                 <>
                   <Loader2 className="h-5 w-5 animate-spin" />
-<<<<<<< HEAD
-                  Loading...
-=======
                   Siginig In...
->>>>>>> f5ba03c (UI changes)
                 </>
               ) : (
                 "Sign in"

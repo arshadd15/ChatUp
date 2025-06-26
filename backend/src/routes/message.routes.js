@@ -5,14 +5,18 @@ const {
   getMessages,
   sendMessage,
 } = require("../controllers/message.conroller");
-// const upload = require("../middleware/upload.middleware");
+const ratelimiter = require("express-rate-limit");
 const router = express.Router();
+
+const messageLimiter = ratelimiter({
+  windowMs: 60 * 1000, //1 minute
+  max: 10, //limit each IP to 100 request per windowMs
+  message: "Too many requests from this IP, please try again later.",
+});
 
 router.get("/users", protectRoute, getUsersForSideBar);
 router.get("/:id", protectRoute, getMessages);
 
-//uncomment this when you are done and optimizsed everything
-// router.post("/send/:id", protectRoute, upload.single("image"), sendMessage);
-router.post("/send/:id", protectRoute, sendMessage);
+router.post("/send/:id", protectRoute, messageLimiter, sendMessage);
 
 module.exports = router;
