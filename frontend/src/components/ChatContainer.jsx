@@ -44,10 +44,23 @@ const ChatContainer = () => {
     );
 
   return (
+<<<<<<< HEAD
     <div className="flex-1 flex flex-col overflow-auto">
       <ChatHeader />
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((message, keyId) => (
+=======
+    <div className="flex-1 flex flex-col">
+      {isMobile ? (
+        <div className="fixed top-16 z-10 left-0 right-0 bg-base-100">
+          <ChatHeader />
+        </div>
+      ) : (
+        <ChatHeader />
+      )}
+      <div className="flex-1 overflow-y-auto mt-6 lg:mt-0 p-4 space-y-4">
+        {messages.map((message) => (
+>>>>>>> bd5f59e (Final responsive changes)
           <div
             key={message._id}
             className={`chat ${
