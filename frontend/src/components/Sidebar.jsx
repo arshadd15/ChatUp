@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useChatStore } from "../store/useChatStore";
 import { useAuthStore } from "../store/useAuthStore";
 import SidebarSkeleton from "./skeletons/SidebarSkeleton";
-import { Users } from "lucide-react";
+import { Users, X } from "lucide-react";
 
 const Sidebar = ({ isMobile = false }) => {
   const { getUsers, users, selectedUser, setSelectedUser, isUsersLoading } =
     useChatStore();
   const { onlineUsers } = useAuthStore();
   const [showOnlineOnly, setShowOnlineOnly] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     getUsers();
@@ -65,7 +66,10 @@ const Sidebar = ({ isMobile = false }) => {
               <img
                 src={user.profilePic || "/avatar.png"}
                 alt={user.name}
-                className="size-12 object-cover rounded-full"
+                className="size-12 object-cover rounded-full cursor-pointer"
+                onClick={() =>
+                  setSelectedImage(user.profilePic || "/avatar.png")
+                }
               />
               {onlineUsers.includes(user._id) && (
                 <span
@@ -88,6 +92,25 @@ const Sidebar = ({ isMobile = false }) => {
           <div className="text-center text-zinc-500 py-4">No online Users</div>
         )}
       </div>
+      {selectedImage && (
+        <div
+          className="fixed inset-0  bg-black/30 backdrop-blur-2xl flex items-center justify-center z-50"
+          onClick={() => setSelectedImage(null)}
+        >
+          <img
+            src={selectedImage}
+            alt="Full size Image"
+            className="max-h-[90%] max-w-[90%] rounded-lg"
+            onClick={(e) => e.stopPropagation()}
+          />
+          <button
+            className="absolute top-4 right-4 text-primary-300 text-2xl p-2 bg-primary/30 rounded-full hover:bg-primary/20"
+            onClick={() => setSelectedImage(null)}
+          >
+            <X />
+          </button>
+        </div>
+      )}
     </aside>
   );
 };

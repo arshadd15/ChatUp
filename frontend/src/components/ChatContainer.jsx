@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useChatStore } from "../store/useChatStore";
 import ChatHeader from "./ChatHeader";
 import MessageInput from "./MessageInput";
 import MessageSkeleton from "./skeletons/MessageSkeleton";
 import { useAuthStore } from "../store/useAuthStore";
 import { formatMessageTime } from "../lib/utils";
-import { useRef } from "react";
+import { X } from "lucide-react";
 
 const ChatContainer = ({ isMobile = false }) => {
   const {
@@ -18,6 +18,7 @@ const ChatContainer = ({ isMobile = false }) => {
   } = useChatStore();
   const { authUser } = useAuthStore();
   const messageEndRef = useRef(null);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     if (!selectedUser._id) return;
@@ -90,7 +91,8 @@ const ChatContainer = ({ isMobile = false }) => {
                 <img
                   src={message.image}
                   alt="attachment"
-                  className="sm:max-w-[200px] rounded-md mb-2"
+                  className="sm:max-w-[200px] rounded-md mb-2 cursor-pointer"
+                  loading="lazy"
                   onLoad={() => {
                     if (messageEndRef.current) {
                       messageEndRef.current.scrollIntoView({
@@ -98,6 +100,7 @@ const ChatContainer = ({ isMobile = false }) => {
                       });
                     }
                   }}
+                  onClick={() => setSelectedImage(message.image)}
                 />
               )}
               {message.text && <p>{message.text}</p>}
@@ -105,6 +108,25 @@ const ChatContainer = ({ isMobile = false }) => {
           </div>
         ))}
         <div className="h-0 w-0 overflow-hidden" ref={messageEndRef} />
+        {selectedImage && (
+          <div
+            className="fixed inset-0  bg-black/30 backdrop-blur-2xl flex items-center justify-center z-50"
+            onClick={() => setSelectedImage(null)}
+          >
+            <img
+              src={selectedImage}
+              alt="Full size Image"
+              className="max-h-[80%] max-w-[80%] rounded-lg"
+              onClick={(e) => e.stopPropagation()}
+            />
+            <button
+              className="absolute top-4 right-4 text-primary-300 text-2xl p-2 bg-primary/30 rounded-full hover:bg-primary/20"
+              onClick={() => setSelectedImage(null)}
+            >
+              <X />
+            </button>
+          </div>
+        )}
       </div>
       <MessageInput />
     </div>
