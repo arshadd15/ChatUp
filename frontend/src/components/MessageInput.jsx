@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { useChatStore } from "../store/useChatStore";
 import { Image, Send, X } from "lucide-react";
 import toast from "react-hot-toast";
+import { compressImage } from "../lib/compressImage";
 
 const MessageInput = () => {
   const [text, setText] = useState("");
@@ -9,7 +10,7 @@ const MessageInput = () => {
   const fileInputRef = useRef(null);
   const { sendMessage, isSendingMessage } = useChatStore();
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     const file = e.target.files[0];
 
     if (!file.type.startsWith("image/")) {
@@ -17,12 +18,12 @@ const MessageInput = () => {
       return;
     }
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setImagePreview(reader.result);
-    };
-
-    reader.readAsDataURL(file);
+    try {
+      const compressBase64 = await compressImage(file);
+      setImagePreview(compressBase64);
+    } catch (error) {
+      toast.error("Failed to compress image");
+    }
   };
 
   const removeImage = () => {
@@ -59,13 +60,21 @@ const MessageInput = () => {
             <img
               src={imagePreview}
               alt="Preview"
-              className="w-20 h-20 object-cover rounded-lg border border-zinc-700"
+              className={`w-20 h-20 object-cover rounded-lg border border-zinc-700 ${
+                isSendingMessage ? "opacity-60" : ""
+              }`}
             />
+            {isSendingMessage && (
+              <div className="absolute inset-0 flex items-center justify-center rounded-lg">
+                <span className="loading loading-spinner loading-md text-white"></span>
+              </div>
+            )}
             <button
               onClick={removeImage}
               className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-base-300
               flex items-center justify-center"
               type="button"
+              disabled={isSendingMessage}
             >
               <X className="size-3" />
             </button>
